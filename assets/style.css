@@ -30,7 +30,22 @@ a { color: inherit; }
 .brand img { border-radius: 9px; }
 .nav nav { display: flex; align-items: center; gap: 18px; font-weight: 600; font-size: 15px; }
 .nav nav a { text-decoration: none; }
-.nav nav a:not(.btn):hover { color: var(--pink-deep); }
+.nav nav > a:not(.btn):hover { color: var(--pink-deep); }
+
+/* language switcher (no-JS <details> dropdown) */
+.lang-switch { position: relative; }
+.lang-switch summary { display: flex; align-items: center; gap: 6px; list-style: none; cursor: pointer; padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); font-size: 14px; line-height: 1.2; white-space: nowrap; }
+.lang-switch summary::-webkit-details-marker { display: none; }
+.lang-switch summary::after { content: ""; width: 6px; height: 6px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); margin-inline-start: 2px; } /* physical borders: a down chevron in both directions */
+.lang-switch summary:hover, .lang-switch[open] summary { border-color: var(--ink); }
+.lang-switch summary:focus-visible { outline: 2px solid var(--pink-deep); outline-offset: 2px; }
+.lang-switch svg { flex: none; }
+.lang-code { display: none; }
+.lang-switch ul { position: absolute; inset-inline-end: 0; top: calc(100% + 8px); z-index: 20; min-width: 190px; margin: 0; padding: 6px; list-style: none; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+.lang-switch li a { display: block; padding: 8px 12px; border-radius: 10px; font-family: var(--body); font-weight: 500; font-size: 15px; line-height: 1.3; text-align: start; }
+.lang-switch li a:hover { background: var(--mint); }
+.lang-switch li a[aria-current="page"] { background: var(--blue); font-weight: 700; }
+.lang-switch li a.lang-fallback { color: var(--muted); }
 
 /* buttons */
 .btn { display: inline-block; background: var(--ink); color: #fff !important; text-decoration: none !important; font-weight: 700; font-size: 15px; line-height: 1.2; padding: 13px 20px; border-radius: 999px; text-align: center; transition: transform .15s ease, background .15s ease; }
@@ -61,7 +76,7 @@ a { color: inherit; }
 .dek { font-size: 19.5px; color: var(--muted); line-height: 1.55; margin: 0 0 14px; }
 .toc { background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 16px 22px; margin: 28px 0 8px; }
 .toc summary { font: 800 16px var(--display); cursor: pointer; }
-.toc ol { margin: 10px 0 2px; padding-left: 20px; font-size: 15.5px; line-height: 1.6; }
+.toc ol { margin: 10px 0 2px; padding-inline-start: 20px; font-size: 15.5px; line-height: 1.6; }
 .toc a { text-decoration: none; }
 .toc a:hover { text-decoration: underline; }
 
@@ -73,11 +88,12 @@ a { color: inherit; }
 .prose li { margin-bottom: 6px; }
 .prose a { color: #1f5fae; text-decoration: underline; text-underline-offset: 2px; }
 .prose strong { color: var(--ink-deep); }
-.prose blockquote { margin: 24px 0; padding: 14px 20px; border-left: 4px solid var(--pink-deep); background: #fff4f6; border-radius: 0 14px 14px 0; }
+.prose blockquote { margin: 24px 0; padding: 14px 20px; border-inline-start: 4px solid var(--pink-deep); background: #fff4f6; border-radius: 0 14px 14px 0; }
+[dir="rtl"] .prose blockquote { border-radius: 14px 0 0 14px; }
 .prose blockquote p:last-child { margin-bottom: 0; }
 .table-wrap { overflow-x: auto; margin: 0 0 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
 .prose table { border-collapse: collapse; width: 100%; font-size: 15px; line-height: 1.5; }
-.prose th, .prose td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.prose th, .prose td { text-align: start; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .prose th { background: var(--mint); font-weight: 700; }
 .prose tr:last-child td { border-bottom: 0; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 36px 0; }
@@ -114,9 +130,28 @@ a { color: inherit; }
 .foot-links a:hover { color: var(--ink); text-decoration: underline; }
 .copy { font-size: 13px; color: var(--muted); margin: 0; }
 
+/* scripts without Latin glyphs: system-font fallbacks, no faux-tight tracking */
+:lang(zh) { --display: "Nunito Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; --body: "DM Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+:lang(ja) { --display: "Nunito Sans", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic", Meiryo, sans-serif; --body: "DM Sans", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic", Meiryo, sans-serif; }
+:lang(ar) { --display: "Nunito Sans", "Geeza Pro", "Noto Sans Arabic", "Noto Kufi Arabic", Tahoma, sans-serif; --body: "DM Sans", "Geeza Pro", "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif; }
+html:lang(zh) body, html:lang(ja) body { line-height: 1.85; line-break: strict; }
+html:lang(ar) body { line-height: 1.85; }
+:lang(zh) h1, :lang(zh) h2, :lang(ja) h1, :lang(ja) h2, :lang(ar) h1, :lang(ar) h2, :lang(ar) .kicker { letter-spacing: 0; }
+:lang(zh) .kicker, :lang(ja) .kicker, :lang(ar) .kicker { text-transform: none; letter-spacing: 0; }
+:lang(zh) h1, :lang(zh) h2, :lang(zh) h3, :lang(ja) h1, :lang(ja) h2, :lang(ja) h3 { word-break: auto-phrase; }
+:lang(ar) .hero h1, :lang(ar) .post-head h1, :lang(ar) .prose h2, :lang(ar) .prose h3 { line-height: 1.4; }
+:lang(zh) .hero h1, :lang(zh) .post-head h1, :lang(ja) .hero h1, :lang(ja) .post-head h1 { line-height: 1.3; }
+:lang(zh) .prose h2, :lang(ja) .prose h2 { line-height: 1.4; }
+/* RTL: layout uses logical properties, so dir="rtl" mirrors it; images, the logo and screenshots are never flipped */
+
 @media (max-width: 560px) {
+  .lang-name { display: none; }
+  .lang-code { display: inline; font-weight: 700; }
+  .lang-switch summary { padding: 7px 9px; }
+  .nav nav { gap: 10px; }
+  .brand { font-size: 19px; }
   body { font-size: 16.5px; }
-  .nav nav a:not(.btn) { display: none; }
+  .nav nav > a:not(.btn) { display: none; }
   .hero { padding-top: 36px; }
   .foot-cta .btn { width: 100%; }
 }
